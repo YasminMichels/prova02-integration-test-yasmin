@@ -70,4 +70,58 @@ describe('req/res software testing', () => {
       .get('/users/2')
       .expectStatus(StatusCodes.OK);
   });
+
+  //Lista usuários de uma página específica
+  it('should list users from page 2', async () => {
+    await p
+      .spec()
+      .get('/users?page=2')
+      .expectStatus(StatusCodes.OK)
+      .expectJsonLike({
+        page: 2
+      });
+  });
+
+  //Lista recursos (colors)
+  it('should get a list of resources', async () => {
+    await p
+      .spec()
+      .get('/unknown')
+      .expectStatus(StatusCodes.OK)
+      .expectJsonLike({
+        data: []
+      });
+  });
+
+  //Busca um recurso específico
+  it('should get a single resource', async () => {
+    await p
+      .spec()
+      .get('/unknown/2')
+      .expectStatus(StatusCodes.OK)
+      .expectJsonLike({
+        data: {
+          id: 2,
+          name: 'fuchsia rose'
+        }
+      });
+  });
+
+  //Busca um usuário inexistente
+  it('should return 404 when user is not found', async () => {
+    await p
+      .spec()
+      .get('/users/23')
+      .expectStatus(StatusCodes.NOT_FOUND);
+  });
+
+  //Busca um recurso inexistente
+  it('should return 404 when resource is not found', async () => {
+    await p
+      .spec()
+      .get('/unknown/23')
+      .expectStatus(StatusCodes.NOT_FOUND);
+  });
+
+
 });
